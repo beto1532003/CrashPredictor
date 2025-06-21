@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم المستخدمين</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">👤 لوحة تحكم المستخدمين</h2>
+
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    <form method="post" class="mb-4">
+        <div class="row g-2">
+            <div class="col">
+                <input type="text" name="new_username" class="form-control" placeholder="اسم المستخدم الجديد" required>
+            </div>
+            <div class="col">
+                <input type="password" name="new_password" class="form-control" placeholder="كلمة المرور" required>
+            </div>
+            <div class="col">
+                <select name="role" class="form-select">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" name="add_user" class="btn btn-success w-100">➕ إضافة مستخدم</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>اسم المستخدم</th>
+            <th>الدور</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user, role in users %}
+            <tr>
+                <td>{{ user }}</td>
+                <td>{{ role }}</td>
+                <td>
+                    {% if user != session.username %}
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="username_to_delete" value="{{ user }}">
+                            <button type="submit" name="delete_user" class="btn btn-danger btn-sm">🗑️ حذف</button>
+                        </form>
+                    {% else %}
+                        <span class="text-muted">🛡️ لا يمكن الحذف</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 الصفحة الرئيسية</a>
+</div>
+</body>
+</html>
